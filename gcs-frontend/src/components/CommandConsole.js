@@ -15,7 +15,7 @@ const CommandConsole = ({ commands, onSendCommand }) => (
         <Send size={20} />
       </button>
     </div>
-    <div className="h-80 bg-slate-900 rounded p-2 overflow-y-auto font-mono text-sm">
+    <div className="h-14 bg-slate-900 rounded p-2 overflow-y-auto font-mono text-sm">
       {commands.map((cmd, i) => (
         <div key={i} className="text-gray-400">{cmd}</div>
       ))}

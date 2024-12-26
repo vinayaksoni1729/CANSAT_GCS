@@ -65,59 +65,49 @@ const GCSApplication = () => {
   return (
     <div className="min-h-screen bg-slate-900 text-white pt-2">
       <Header missionId="1022" time="07 45 02.787" />
-
+  
       <div className="grid grid-cols-12 gap-2 p-2">
         <div className="col-span-8">
           <div className="grid grid-cols-2 gap-2 mb-2">
             <ConnectionPanel port="COM11" />
             <GPSInfo satellites={0} latitude="0.000000" longitude="0.000000" />
           </div>
-
+  
           <div className="grid grid-cols-2 gap-2">
-            <div className='mb-2'>
+            <div className="bg-slate-800 rounded-lg">
               <ContainerStatus
                 status="PRELAUNCH"
                 healthyPackets={155}
                 corruptedPackets={0}
                 batteryLevel={14.06}
               />
+              <PressureSimulation onSendCommand={sendCommand} />
             </div>
-
-            {/*}
-            <div className="grid gap-1 p-2">
-              <TelemetryGraph title="Temperature" data={sampleData} />
-              <TelemetryGraph title="Altitude" data={sampleData} color="rgb(59, 130, 246)" />
-            </div> */}
-
-            <div className="bg-slate-800 p-10 rounded-lg">
+  
+            <div className="bg-slate-800 p-6 rounded-lg">
               <h3 className="text-white font-bold mb-4 uppercase">auto-gyro payload</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 mt-5">
                 <TelemetryGraph title="Temperature" data={sampleData} />
                 <TelemetryGraph title="Gyroscope" data={sampleData} color="rgb(59, 130, 246)" />
-              </div>
-            </div>
 
-          </div>
-          <div className="grid grid-cols-2 gap-2 mb-10">
-            <PressureSimulation onSendCommand={sendCommand} />
-            <div className="bg-slate-800 p-10 rounded-lg">
-              <h3 className="text-white font-bold mb-4 uppercase"></h3>
-              <div className="grid grid-cols-2 gap-4">
-                <TelemetryGraph title="RPM" data={sampleData} />
-                <TelemetryGraph title="Accelerometer " data={sampleData} color="rgb(59, 130, 246)" />
               </div>
+              <div className='grid grid-cols-2 gap-4 mt-8'>
+              <TelemetryGraph title="RPM" data={sampleData} />
+              <TelemetryGraph title="Accelerometer" data={sampleData} color="rgb(59, 130, 246)" />
+              </div>
+
             </div>
           </div>
         </div>
-
+  
         <div className="col-span-4 gap-2">
-          <div className='gap-2'>
-            <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
-          </div>
-          <div className='gap-2 mb-2 p-2'>
+          <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
+          <div className="mt-2">
             <MissionProgress phase="PRELAUNCH" progress={20} />
           </div>
-          <ThreeD />
+          <div className="mt-2">
+            <ThreeD />
+          </div>
         </div>
       </div>
     </div>
