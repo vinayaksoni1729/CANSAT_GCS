@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import ConnectionPanel from './ConnectionPanel';
 import TelemetryGraph from './TelemetryGraph';
@@ -6,65 +6,121 @@ import ContainerStatus from './ContainerStatus';
 import CommandConsole from './CommandConsole';
 import GPSInfo from './GPSInfo';
 import MissionProgress from './MissionProgress';
+import PressureSimulation from './PressureSimulation';
+import ThreeD from './ThreeD';
 
-// Main GCS Application
 const GCSApplication = () => {
-  const [commands] = useState([
-    '1022,00:04:23,789,T,90.20,27.52,6.32,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,',
-    '1022,00:04:23,790,T,90.20,27.52,6.32,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,'
-  ]);
+  const [telemetryData, setTelemetryData] = useState([]);
+  const [ws, setWs] = useState(null);
 
-  // Sample telemetry data
-  const tempData = Array.from({ length: 20 }, (_, i) => ({
+  // Sample data for graphs
+  const sampleData = Array.from({ length: 20 }, (_, i) => ({
     packet: i,
-    value: 25 + Math.random()
+    value: 25 + Math.random(),
   }));
 
+  useEffect(() => {
+    const websocket = new WebSocket('ws://localhost:8000/ws');
+
+    websocket.onopen = () => {
+      console.log('Connected to GCS backend');
+      setWs(websocket); // Set WebSocket connection on successful open
+    };
+
+    websocket.onmessage = (event) => {
+      const telemetry = JSON.parse(event.data);
+      setTelemetryData((prev) => [...prev, telemetry]);
+    };
+
+    websocket.onclose = () => {
+      console.log('WebSocket connection closed');
+      setWs(null); // Clear the WebSocket reference on close
+    };
+
+    websocket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    return () => {
+      console.log('Cleaning up WebSocket connection');
+      if (websocket.readyState === WebSocket.OPEN) {
+        websocket.close();
+      }
+    };
+  }, []);
+
+  const sendCommand = (command) => {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(
+        JSON.stringify({
+          type: 'COMMAND',
+          data: command,
+        })
+      );
+    } else {
+      console.warn('WebSocket is not open. Cannot send command:', command);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <div className="min-h-screen bg-slate-900 text-white pt-2">
       <Header missionId="1022" time="07 45 02.787" />
-      
-      <div className="grid grid-cols-12 gap-4 p-4">
+
+      <div className="grid grid-cols-12 gap-2 p-2">
         <div className="col-span-8">
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-2 gap-2 mb-2">
             <ConnectionPanel port="COM11" />
             <GPSInfo satellites={0} latitude="0.000000" longitude="0.000000" />
           </div>
-          
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <ContainerStatus 
-              status="PRELAUNCH"
-              healthyPackets={155}
-              corruptedPackets={0}
-              batteryLevel={74.06}
-            />
-            <div className="grid gap-4">
-              <TelemetryGraph title="Temperature" data={tempData} />
-              <TelemetryGraph title="Altitude" data={tempData} color="rgb(59, 130, 246)" />
+
+          <div className="grid grid-cols-2 gap-2">
+            <div className='mb-2'>
+              <ContainerStatus
+                status="PRELAUNCH"
+                healthyPackets={155}
+                corruptedPackets={0}
+                batteryLevel={14.06}
+              />
             </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-slate-800 p-4 rounded-lg">
-              <h3 className="text-white font-bold mb-4">TETHERED PAYLOAD</h3>
+
+            {/*}
+            <div className="grid gap-1 p-2">
+              <TelemetryGraph title="Temperature" data={sampleData} />
+              <TelemetryGraph title="Altitude" data={sampleData} color="rgb(59, 130, 246)" />
+            </div> */}
+
+            <div className="bg-slate-800 p-10 rounded-lg">
+              <h3 className="text-white font-bold mb-4 uppercase">auto-gyro payload</h3>
               <div className="grid grid-cols-2 gap-4">
-                <TelemetryGraph title="Temperature" data={tempData} />
-                <TelemetryGraph title="Gyroscope" data={tempData} color="rgb(59, 130, 246)" />
+                <TelemetryGraph title="Temperature" data={sampleData} />
+                <TelemetryGraph title="Gyroscope" data={sampleData} color="rgb(59, 130, 246)" />
+              </div>
+            </div>
+
+          </div>
+          <div className="grid grid-cols-2 gap-2 mb-10">
+            <PressureSimulation onSendCommand={sendCommand} />
+            <div className="bg-slate-800 p-10 rounded-lg">
+              <h3 className="text-white font-bold mb-4 uppercase"></h3>
+              <div className="grid grid-cols-2 gap-4">
+                <TelemetryGraph title="RPM" data={sampleData} />
+                <TelemetryGraph title="Accelerometer " data={sampleData} color="rgb(59, 130, 246)" />
               </div>
             </div>
           </div>
         </div>
-        
-        <div className="col-span-4">
-          <CommandConsole commands={commands} />
+
+        <div className="col-span-4 gap-2">
+          <div className='gap-2'>
+            <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
+          </div>
+          <div className='gap-2 mb-2 p-2'>
+            <MissionProgress phase="PRELAUNCH" progress={20} />
+          </div>
+          <ThreeD />
         </div>
-      </div>
-      
-      <div className="p-4">
-        <MissionProgress phase="PRELAUNCH" progress={20} />
       </div>
     </div>
   );
 };
-
 export default GCSApplication;

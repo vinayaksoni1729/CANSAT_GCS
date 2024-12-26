@@ -12,7 +12,7 @@ const ConnectionPanel = ({ port, onRefresh, onFileSelect }) => (
       </div>
       <button 
         onClick={onRefresh}
-        className="p-2 bg-slate-700 rounded hover:bg-slate-600"
+        className="p-3 bg-slate-700 rounded hover:bg-slate-600"
       >
         <RefreshCw className="text-white" size={20} />
       </button>
