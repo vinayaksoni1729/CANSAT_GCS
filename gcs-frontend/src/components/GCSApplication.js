@@ -9,8 +9,6 @@ import MissionProgress from './MissionProgress';
 import PressureSimulation from './PressureSimulation';
 import ThreeD from './ThreeD';
 import LiveData from './LiveData';
-import BotLGraph from './BotLGraph';
-import BotRGraph from './BotRGraph';
 
 const GCSApplication = () => {
   const [telemetryData, setTelemetryData] = useState([]);
@@ -87,7 +85,7 @@ const GCSApplication = () => {
               <PressureSimulation onSendCommand={sendCommand} />
             </div>
 
-            <div className="bg-slate-800 p-6 rounded-lg">
+            <div className="bg-slate-800 p-6">
               <h3 className="text-white font-bold mb-4 uppercase">auto-gyro payload</h3>
               <div className="grid grid-cols-2 gap-4 mt-5">
                 <TelemetryGraph title="Temperature" data={sampleData} />
@@ -100,11 +98,13 @@ const GCSApplication = () => {
               </div>
 
             </div>
-            <div className="bg-slate-800 p-6 rounded-lg">
-              <BotLGraph />
+            <div className="bg-slate-800 p-2 grid grid-cols-2 gap-4">
+              <TelemetryGraph title="RPM" data={sampleData} />
+              <TelemetryGraph title="RPM" data={sampleData} />
             </div>
-            <div className="bg-slate-800 p-6 rounded-lg">
-              <BotRGraph />
+            <div className="bg-slate-800 p-2 grid grid-cols-2 gap-4">
+            <TelemetryGraph title="RPM" data={sampleData} />
+            <TelemetryGraph title="RPM" data={sampleData} />
             </div>
           </div>
         </div>
@@ -112,7 +112,11 @@ const GCSApplication = () => {
         <div className="col-span-4 gap-2">
           <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
           <div className="mt-2">
-            <ThreeD />
+            <ThreeD height={245} orientation={{
+              x: telemetryData.pitch || 0,  // in radians
+              y: telemetryData.yaw || 0,    // in radians
+              z: telemetryData.roll || 0    // in radians
+            }} />
           </div>
           <div className="mt-2">
             <MissionProgress phase="PRELAUNCH" progress={20} />
