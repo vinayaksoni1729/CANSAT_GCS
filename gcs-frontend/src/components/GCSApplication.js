@@ -76,13 +76,12 @@ const GCSApplication = () => {
 
           <div className="grid grid-cols-2 gap-2">
             <div className="bg-slate-800 rounded-lg">
-              <ContainerStatus
-                status="PRELAUNCH"
-                healthyPackets={155}
-                corruptedPackets={0}
-                batteryLevel={14.06}
-              />
-              <PressureSimulation onSendCommand={sendCommand} />
+              <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
+              <div className='grid grid-cols-2 p-4'>
+                <TelemetryGraph title="Pressure" data={sampleData} />
+                <TelemetryGraph title="Some" data={sampleData} />
+              </div>
+
             </div>
 
             <div className="bg-slate-800 p-6">
@@ -98,28 +97,27 @@ const GCSApplication = () => {
               </div>
 
             </div>
-            <div className="bg-slate-800 p-2 grid grid-cols-2 gap-4">
-              <TelemetryGraph title="RPM" data={sampleData} />
-              <TelemetryGraph title="RPM" data={sampleData} />
+            <div className="bg-slate-800 p-3 grid grid-cols-2 gap-4">
+              <TelemetryGraph title="battery voltage" data={sampleData} />
+              <TelemetryGraph title="Some" data={sampleData} />
             </div>
-            <div className="bg-slate-800 p-2 grid grid-cols-2 gap-4">
-            <TelemetryGraph title="RPM" data={sampleData} />
-            <TelemetryGraph title="RPM" data={sampleData} />
+            <div className="bg-slate-800 p-3 grid grid-cols-2 gap-4">
+              <TelemetryGraph title="Altitude" data={sampleData} />
+              <TelemetryGraph title="Some" data={sampleData} />
             </div>
+          </div>
+          <div className="mt-2">
+            <MissionProgress phase="PRELAUNCH" progress={20} />
           </div>
         </div>
 
         <div className="col-span-4 gap-2">
-          <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
-          <div className="mt-2">
-            <ThreeD height={245} orientation={{
+          <div className="">
+            <ThreeD height={200} orientation={{
               x: telemetryData.pitch || 0,  // in radians
               y: telemetryData.yaw || 0,    // in radians
               z: telemetryData.roll || 0    // in radians
             }} />
-          </div>
-          <div className="mt-2">
-            <MissionProgress phase="PRELAUNCH" progress={20} />
           </div>
           <LiveData />
 
