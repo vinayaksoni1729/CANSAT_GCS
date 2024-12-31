@@ -99,7 +99,11 @@ const LiveData = () => {
           </div>
           <div className="bg-gray-800 p-3 rounded-lg">
             <div className="text-gray-400 text-sm">Signal</div>
-            <div className="text-xl">{gcsData.missionStatus.signalStrength}%</div>
+            <div className="text-xl flex">{gcsData.missionStatus.signalStrength}%
+              <div className='text-xs mt-2'>
+              -34dBm
+              </div>
+            </div>
             <StatusIndicator 
               value={gcsData.missionStatus.signalStrength} 
               max={100} 

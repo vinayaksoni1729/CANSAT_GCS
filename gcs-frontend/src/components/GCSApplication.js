@@ -71,41 +71,40 @@ const GCSApplication = () => {
         <div className="col-span-8">
           <div className="grid grid-cols-2 gap-2 mb-2">
             <ConnectionPanel port="COM11" />
-            <GPSInfo satellites={0} latitude="0.000000" longitude="0.000000" />
+            <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
+
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <div className="bg-slate-800 rounded-lg">
-              <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
-              <div className='grid grid-cols-2 p-4'>
-                <TelemetryGraph title="Pressure" data={sampleData} />
-                <TelemetryGraph title="Some" data={sampleData} />
-              </div>
+          <div className="grid grid-cols-1 gap-2 ">
 
-            </div>
 
-            <div className="bg-slate-800 p-6">
+            <div className="bg-slate-800 p-6 rounded-lg">
               <h3 className="text-white font-bold mb-4 uppercase">auto-gyro payload</h3>
-              <div className="grid grid-cols-2 gap-4 mt-5">
+              <div className="grid grid-cols-4 gap-4 mt-5">
                 <TelemetryGraph title="Temperature" data={sampleData} />
+                <TelemetryGraph title="Battery Voltage" data={sampleData} color="rgb(59, 130, 246)" />
+                <TelemetryGraph title="Pressure" data={sampleData} />
                 <TelemetryGraph title="Gyroscope" data={sampleData} color="rgb(59, 130, 246)" />
 
               </div>
-              <div className='grid grid-cols-2 gap-4 mt-8'>
+              <div className='grid grid-cols-4 gap-4 mt-8'>
                 <TelemetryGraph title="RPM" data={sampleData} />
                 <TelemetryGraph title="Accelerometer" data={sampleData} color="rgb(59, 130, 246)" />
+                <TelemetryGraph title="Altitude" data={sampleData} />
+                <TelemetryGraph title="Magnetometer" data={sampleData} color="rgb(59, 130, 246)" />
               </div>
 
             </div>
-            <div className="bg-slate-800 p-3 grid grid-cols-2 gap-4">
-              <TelemetryGraph title="battery voltage" data={sampleData} />
-              <TelemetryGraph title="Some" data={sampleData} />
+          </div>
+          <div className='grid grid-cols-2 p-2 gap-2'>
+            <div>
+              <GPSInfo satellites={0} latitude="0.000000" longitude="0.000000" />
             </div>
-            <div className="bg-slate-800 p-3 grid grid-cols-2 gap-4">
-              <TelemetryGraph title="Altitude" data={sampleData} />
-              <TelemetryGraph title="Some" data={sampleData} />
+            <div>
+              <GPSInfo satellites={0} latitude="0.000000" longitude="0.000000" />
             </div>
           </div>
+
           <div className="mt-2">
             <MissionProgress phase="PRELAUNCH" progress={20} />
           </div>
@@ -113,7 +112,7 @@ const GCSApplication = () => {
 
         <div className="col-span-4 gap-2">
           <div className="">
-            <ThreeD height={200} orientation={{
+            <ThreeD height={230} orientation={{
               x: telemetryData.pitch || 0,  // in radians
               y: telemetryData.yaw || 0,    // in radians
               z: telemetryData.roll || 0    // in radians

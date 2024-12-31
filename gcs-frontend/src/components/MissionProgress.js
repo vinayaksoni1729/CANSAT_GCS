@@ -7,7 +7,7 @@ const MissionProgress = ({ phase, progress }) => (
         <div key={stage} className="text-white text-xs">{stage}</div>
       ))}
     </div>
-    <div className="w-full h-3 bg-slate-700 rounded-full overflow-hidden">
+    <div className="w-full h-5 bg-slate-700 rounded-full overflow-hidden">
       <div 
         className="h-full bg-cyan-400 transition-all duration-1000"
         style={{ width: `${progress}%` }}
