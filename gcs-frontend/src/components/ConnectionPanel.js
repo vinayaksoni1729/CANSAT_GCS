@@ -1,8 +1,13 @@
 import React from 'react';
 import { RefreshCw } from 'lucide-react';
+import { ThemeProvider, useTheme } from './ThemeContext';
 
-const ConnectionPanel = ({ port, onRefresh, onFileSelect }) => (
-  <div className="p-4 bg-slate-800 rounded-lg">
+
+const ConnectionPanel = ({ port, onRefresh, onFileSelect }) => {
+  const { isDark } = useTheme();
+  
+  return (
+    <div className={`p-4 ${isDark ? 'bg-slate-800' : 'bg-white shadow-md'} rounded-lg`}>
     <div className="flex gap-4 items-center">
       <div className="flex-1">
         <label className="text-gray-400 text-sm">XBEE Port:</label>
@@ -26,7 +31,8 @@ const ConnectionPanel = ({ port, onRefresh, onFileSelect }) => (
         CHOOSE FILE
       </button>
     </div>
-  </div>
-);
+    </div>
+  );
+};
 
 export default ConnectionPanel;

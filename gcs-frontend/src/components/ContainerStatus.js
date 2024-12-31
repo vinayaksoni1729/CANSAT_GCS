@@ -1,8 +1,12 @@
 import React from 'react';
 import { Battery } from 'lucide-react';
+import { ThemeProvider, useTheme } from './ThemeContext';
 
-const ContainerStatus = ({ status, healthyPackets, corruptedPackets, batteryLevel }) => (
-  <div className="p-4 bg-slate-800 rounded-lg">
+const ContainerStatus = ({ status, healthyPackets, corruptedPackets, batteryLevel }) => {
+  const { isDark } = useTheme();
+  
+  return (
+    <div className={`p-4 ${isDark ? 'bg-slate-800' : 'bg-white shadow-md'} rounded-lg`}>
     <div className="flex justify-between items-center mb-4">
       <div>
         <h3 className="text-white font-bold">CONTAINER</h3>
@@ -17,7 +21,8 @@ const ContainerStatus = ({ status, healthyPackets, corruptedPackets, batteryLeve
       <div>Healthy Packets: {healthyPackets}</div>
       <div>Corrupted Packets: {corruptedPackets}</div>
     </div>
-  </div>
-);
+    </div>
+  );
+};
 
 export default ContainerStatus;
