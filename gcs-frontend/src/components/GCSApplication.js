@@ -13,6 +13,7 @@ import { ThemeProvider, useTheme } from './ThemeContext';
 import ButtonB from './ButtonB';
 import EmptyComp from './EmptyComp';
 import Dials from './Dials';
+import NavBall from './NavBall';
 
 const GCSContent = ({ telemetryData, sampleData, sendCommand }) => {
   const { isDark } = useTheme();

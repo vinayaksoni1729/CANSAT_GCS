@@ -35,4 +35,6 @@ const ConnectionPanel = ({ port, onRefresh, onFileSelect }) => {
   );
 };
 
+
+
 export default ConnectionPanel;
