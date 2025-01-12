@@ -10,6 +10,9 @@ import PressureSimulation from './PressureSimulation';
 import ThreeD from './ThreeD';
 import LiveData from './LiveData';
 import { ThemeProvider, useTheme } from './ThemeContext';
+import ButtonB from './ButtonB';
+import EmptyComp from './EmptyComp';
+import Dials from './Dials';
 
 const GCSContent = ({ telemetryData, sampleData, sendCommand }) => {
   const { isDark } = useTheme();
@@ -21,11 +24,18 @@ const GCSContent = ({ telemetryData, sampleData, sendCommand }) => {
         <div className="col-span-8">
           <div className="grid grid-cols-2 gap-2 mb-2">
             <ConnectionPanel port="COM11" />
-            <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
+            <GPSInfo satellites={0} latitude="0.000000" longitude="0.000000" />
+
           </div>
 
-          <div className="grid grid-cols-1 gap-2">
-            <div className={`${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'} p-6 rounded-lg`}>
+          <div className="grid grid-cols-2 gap-2">
+            <CommandConsole commands={telemetryData} onSendCommand={sendCommand} />
+            <ButtonB />
+
+          </div>
+          
+          <div className='grid grid-cols-2 p-2 gap-2'>
+          <div className={`${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'} p-6 rounded-lg`}>
               <h3 className={`${isDark ? 'text-white' : 'text-slate-900'} font-bold mb-4 uppercase`}>
                 auto-gyro payload
               </h3>
@@ -41,16 +51,10 @@ const GCSContent = ({ telemetryData, sampleData, sendCommand }) => {
                 <TelemetryGraph title="Altitude" data={sampleData} />
                 <TelemetryGraph title="Magnetometer" data={sampleData} color="rgb(59, 130, 246)" />
               </div>
-            </div>
-          </div>
-          
-          <div className='grid grid-cols-2 p-2 gap-2'>
-            <GPSInfo satellites={0} latitude="0.000000" longitude="0.000000" />
-            <GPSInfo satellites={0} latitude="0.000000" longitude="0.000000" />
-          </div>
+            </div>          </div>
 
           <div className="mt-2">
-            <MissionProgress phase="PRELAUNCH" progress={20} />
+            <Dials />
           </div>
         </div>
 
@@ -61,8 +65,11 @@ const GCSContent = ({ telemetryData, sampleData, sendCommand }) => {
             z: telemetryData.roll || 0
           }} />
           <LiveData />
-        </div>
+          <EmptyComp />
+        </div> 
       </div>
+      <MissionProgress phase="PRELAUNCH" progress={20} />
+
     </div>
   );
 };

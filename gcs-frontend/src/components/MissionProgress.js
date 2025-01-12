@@ -1,7 +1,7 @@
 import React from 'react';
 
 const MissionProgress = ({ phase, progress }) => (
-  <div className="p-2 bg-slate-800 rounded-lg">
+  <div className="p-5 bg-slate-800 rounded-lg">
     <div className="flex justify-between mb-2">
       {['PRELAUNCH', 'LAUNCH', 'APOGEE', 'PARADEPLOY', 'TPDEPLOY', 'LAND'].map((stage) => (
         <div key={stage} className="text-white text-xs">{stage}</div>

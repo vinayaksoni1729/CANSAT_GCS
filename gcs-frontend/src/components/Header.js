@@ -1,15 +1,15 @@
 import React from 'react';
 import { useTheme } from './ThemeContext';
 import { Sun, Moon } from 'lucide-react';
-
+import logo from './assets/logo.jpg';  // Imported logo
 
 const Header = ({ missionId, time }) => {
   const { isDark, setIsDark } = useTheme();
-  
+
   return (
     <div className={`flex justify-between items-center p-4 ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm'}`}>
       <div className="flex items-center gap-4">
-        <img src="/api/placeholder/48/48" alt="Mission Logo" className="rounded-full" />
+        <img src={logo} alt="Mission Logo" className="rounded-full w-12 h-12" />
         <h1 className={`${isDark ? 'text-white' : 'text-slate-900'} text-2xl font-bold`}>
           Elytra #{missionId}
         </h1>
