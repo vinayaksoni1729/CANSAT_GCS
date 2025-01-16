@@ -1,69 +1,6 @@
 import React from 'react';
 
-const LiveData = () => {
-  // Enhanced sample data - replace with your actual data source
-  const gcsData = {
-    missionStatus: {
-      phase: 'PRELAUNCH',
-      elapsedTime: '00:05:32',
-      batteryVoltage: 11.8,
-      signalStrength: 85,
-      packetHealth: {
-        healthy: 155,
-        corrupted: 0
-      }
-    },
-    position: {
-      altitude: {
-        seaLevel: 70.8,
-        terrain: 161.3
-      },
-      coordinates: {
-        lat: 51.5074,
-        lon: -0.1278
-      },
-      distanceFromLaunch: 235.6,
-      descentRate: -0.98
-    },
-    motion: {
-      speed: {
-        vertical: -0.98,
-        horizontal: 225.82
-      },
-      orientation: {
-        roll: 1.2,
-        pitch: 0.8,
-        yaw: 359.2
-      },
-      acceleration: {
-        x: 0.02,
-        y: 0.01,
-        z: 9.81
-      },
-      gyro: {
-        x: 0.1,
-        y: 0.2,
-        z: 0.1
-      },
-      rpm: 1250
-    },
-    environment: {
-      temperature: {
-        internal: 28.5,
-        external: 22.3
-      },
-      pressure: 101.325,
-      humidity: 45.2,
-      biome: 'Shores'
-    },
-    systemHealth: {
-      cpuTemp: 45.2,
-      memoryUsage: 68,
-      storageUsed: 42,
-      linkQuality: 92
-    }
-  };
-
+const LiveData = ({ telemetryData }) => {
   const StatusIndicator = ({ value, max, color }) => (
     <div className="h-2 w-full bg-gray-700 rounded-full overflow-hidden">
       <div 
@@ -80,32 +17,32 @@ const LiveData = () => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Live Data</h2>
           <span className="px-3 py-1 bg-blue-500 rounded-full text-sm">
-            {gcsData.missionStatus.phase}
+            {telemetryData.phase || 'UNKNOWN'}
           </span>
         </div>
         <div className="grid grid-cols-4 gap-4 mb-6">
           <div className="bg-gray-800 p-3 rounded-lg">
             <div className="text-gray-400 text-sm">Mission Time</div>
-            <div className="text-xl">{gcsData.missionStatus.elapsedTime}</div>
+            <div className="text-xl">{telemetryData.timestamp || '00:00:00'}</div>
           </div>
           <div className="bg-gray-800 p-3 rounded-lg">
             <div className="text-gray-400 text-sm">Battery</div>
-            <div className="text-xl">{gcsData.missionStatus.batteryVoltage}V</div>
+            <div className="text-xl">{telemetryData.batteryVoltage || 0}V</div>
             <StatusIndicator 
-              value={gcsData.missionStatus.batteryVoltage} 
+              value={telemetryData.batteryVoltage || 0} 
               max={12.6} 
               color="bg-green-500"
             />
           </div>
           <div className="bg-gray-800 p-3 rounded-lg">
             <div className="text-gray-400 text-sm">Signal</div>
-            <div className="text-xl flex">{gcsData.missionStatus.signalStrength}%
+            <div className="text-xl flex">{telemetryData.signalStrength || 0}%
               <div className='text-xs mt-2'>
-              -34dBm
+                {telemetryData.signalStrengthDBM || '0'}dBm
               </div>
             </div>
             <StatusIndicator 
-              value={gcsData.missionStatus.signalStrength} 
+              value={telemetryData.signalStrength || 0} 
               max={100} 
               color="bg-blue-500"
             />
@@ -113,7 +50,7 @@ const LiveData = () => {
           <div className="bg-gray-800 p-3 rounded-lg">
             <div className="text-gray-400 text-sm">Packets</div>
             <div className="text-xl">
-              {gcsData.missionStatus.packetHealth.healthy}/{gcsData.missionStatus.packetHealth.healthy + gcsData.missionStatus.packetHealth.corrupted}
+              {telemetryData.packetsHealthy || 0}/{(telemetryData.packetsHealthy || 0) + (telemetryData.packetsCorrupted || 0)}
             </div>
           </div>
         </div>
@@ -127,15 +64,15 @@ const LiveData = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Altitude (ASL):</span>
-                <span className="text-green-400">{gcsData.position.altitude.seaLevel}m</span>
+                <span className="text-green-400">{telemetryData.altitude || 0}m</span>
               </div>
               <div className="flex justify-between">
                 <span>Ground Distance:</span>
-                <span className="text-green-400">{gcsData.position.distanceFromLaunch}m</span>
+                <span className="text-green-400">{telemetryData.distanceFromLaunch || 0}m</span>
               </div>
               <div className="flex justify-between">
                 <span>Descent Rate:</span>
-                <span className="text-green-400">{gcsData.position.descentRate}m/s</span>
+                <span className="text-green-400">{telemetryData.descentRate || 0}m/s</span>
               </div>
             </div>
           </div>
@@ -145,14 +82,14 @@ const LiveData = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>RPM:</span>
-                <span className="text-green-400">{gcsData.motion.rpm}</span>
+                <span className="text-green-400">{telemetryData.rpm || 0}</span>
               </div>
               <div className="flex justify-between">
                 <span>Roll/Pitch/Yaw:</span>
                 <span className="text-green-400">
-                  {gcsData.motion.orientation.roll}° / 
-                  {gcsData.motion.orientation.pitch}° / 
-                  {gcsData.motion.orientation.yaw}°
+                  {telemetryData.roll || 0}° / 
+                  {telemetryData.pitch || 0}° / 
+                  {telemetryData.yaw || 0}°
                 </span>
               </div>
             </div>
@@ -167,17 +104,17 @@ const LiveData = () => {
               <div className="flex justify-between">
                 <span>Temperature Int/Ext:</span>
                 <span className="text-green-400">
-                  {gcsData.environment.temperature.internal}°C / 
-                  {gcsData.environment.temperature.external}°C
+                  {telemetryData.temperatureInternal || 0}°C / 
+                  {telemetryData.temperature || 0}°C
                 </span>
               </div>
               <div className="flex justify-between">
                 <span>Pressure:</span>
-                <span className="text-green-400">{gcsData.environment.pressure}kPa</span>
+                <span className="text-green-400">{telemetryData.pressure || 0}kPa</span>
               </div>
               <div className="flex justify-between">
                 <span>Humidity:</span>
-                <span className="text-green-400">{gcsData.environment.humidity}%</span>
+                <span className="text-green-400">{telemetryData.humidity || 0}%</span>
               </div>
             </div>
           </div>
@@ -187,15 +124,15 @@ const LiveData = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>CPU Temp:</span>
-                <span className="text-green-400">{gcsData.systemHealth.cpuTemp}°C</span>
+                <span className="text-green-400">{telemetryData.cpuTemperature || 0}°C</span>
               </div>
               <div className="flex justify-between">
                 <span>Memory:</span>
-                <span className="text-green-400">{gcsData.systemHealth.memoryUsage}%</span>
+                <span className="text-green-400">{telemetryData.memoryUsage || 0}%</span>
               </div>
               <div className="flex justify-between">
                 <span>Link Quality:</span>
-                <span className="text-green-400">{gcsData.systemHealth.linkQuality}%</span>
+                <span className="text-green-400">{telemetryData.linkQuality || 0}%</span>
               </div>
             </div>
           </div>

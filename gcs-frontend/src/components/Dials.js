@@ -234,7 +234,16 @@ const PreciseCompass = ({ heading }) => {
   );
 };
 
-const FlightDials = ({ roll = 0, pitch = 0, yaw = 0, heading = 0 }) => {
+// Main component that receives telemetryData
+const Dials = ({ telemetryData }) => {
+  // Extract required values from telemetryData with fallbacks
+  const {
+    roll = 0,
+    pitch = 0,
+    yaw = 0,
+    heading = 0
+  } = telemetryData || {};
+
   return (
     <div className="flex gap-6 p-6 bg-zinc-900 rounded-lg items-center">
       <AttitudeDial value={roll} type="ROLL" />
@@ -245,4 +254,4 @@ const FlightDials = ({ roll = 0, pitch = 0, yaw = 0, heading = 0 }) => {
   );
 };
 
-export default FlightDials;
+export default Dials;
