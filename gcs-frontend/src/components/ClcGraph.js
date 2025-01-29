@@ -47,7 +47,7 @@ const ClcGraph = ({ telemetryData }) => {
         ]}
         layout={{
           width: 630,
-          height: 470,
+          height: 440,
           title: {
             text: '3D Live Flight Path',
             font: {

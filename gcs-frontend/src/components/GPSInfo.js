@@ -11,7 +11,7 @@ const GPSInfo = ({ satellites, latitude, longitude }) => {
     <div className="grid grid-cols-3 gap-4 text-sm">
       <div>
         <div className="text-gray-400">Satellites Connected:</div>
-        <div className="text-white">{satellites}</div>
+        <div className="text-white">{satellites || 1}</div>
       </div>
       <div>
         <div className="text-gray-400">Latitude:</div>

@@ -13,6 +13,9 @@ import EmptyComp from './EmptyComp';
 import Dials from './Dials';
 import { useDataParser } from './DataParser';
 import ClcGraph from './ClcGraph';
+import WindDataDisplay from './WindDataDisplay';
+import TimeSeriesPlot from './TimeSeriesPlot';
+import FinStabilizationStatus from './FinStabilizationStatus';
 
 
 
@@ -49,7 +52,7 @@ const GCSContent = ({ telemetryData, sendCommand, onSimulationData }) => {
 
   return (
     <div className={`min-h-screen ${isDark ? 'bg-slate-900' : 'bg-gray-50'} pt-2`}>
-      <Header missionId="1022" time={telemetry.timestamp} />
+      <Header missionId="3190" time={telemetry.timestamp} />
       <div className="grid grid-cols-12 gap-2 p-2">
         <div className="col-span-8">
           <div className="grid grid-cols-2 gap-2 mb-2">
@@ -69,7 +72,7 @@ const GCSContent = ({ telemetryData, sendCommand, onSimulationData }) => {
               commands={commandHistory || []} // Ensure commands is always an array
               onSendCommand={sendCommand}
             />
-            <ButtonB />
+            <Dials telemetryData={telemetry} />
           </div>
 
           <div className='grid grid-cols-2 p-2 gap-2'>
@@ -105,7 +108,7 @@ const GCSContent = ({ telemetryData, sendCommand, onSimulationData }) => {
                 <TelemetryGraph
                   data={graphData.latitude}
                   title="Latitude"
-                  color="rgb(34, 197, 94)"
+                  color="rgb(255,255,0)"
                   unit="m"
                 />
               </div>
@@ -113,22 +116,35 @@ const GCSContent = ({ telemetryData, sendCommand, onSimulationData }) => {
             <ClcGraph telemetryData={telemetry} />
           </div>
 
-          <div className="mt-2">
-            <Dials telemetryData={telemetry} />
+          <div className="grid grid-cols-2 mt-2">
+            <ButtonB />
+            <FinStabilizationStatus
+              telemetryData={telemetry}
+            />
           </div>
         </div>
 
         <div className="col-span-4 gap-2">
-          <ThreeD height={230} orientation={{
-            x: telemetry.pitch,
-            y: telemetry.yaw,
-            z: telemetry.roll
-          }} />
+          <div className='grid grid-cols-2'>
+            <ThreeD height={240} orientation={{
+              x: telemetry.pitch,
+              y: telemetry.yaw,
+              z: telemetry.roll
+            }} />
+            <WindDataDisplay
+              windSpeed={5.6}
+              windDirection={180}
+              temperature={22.5}
+              humidity={65}
+              altitude={250.3}
+            />
+
+          </div>
           <LiveData telemetryData={telemetry} />
-          <EmptyComp />
+          <TimeSeriesPlot telemetryData={telemetry} />
         </div>
       </div>
-      <MissionProgress phase="PRELAUNCH" progress={20} />
+      <MissionProgress phase="APOGEE" progress={40} />
     </div>
   );
 };

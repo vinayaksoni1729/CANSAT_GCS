@@ -17,7 +17,7 @@ const LiveData = ({ telemetryData }) => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Live Data</h2>
           <span className="px-3 py-1 bg-blue-500 rounded-full text-sm">
-            {telemetryData.phase || 'UNKNOWN'}
+            {telemetryData.phase || 'APOGEE'}
           </span>
         </div>
         <div className="grid grid-cols-4 gap-4 mb-6">
@@ -82,7 +82,7 @@ const LiveData = ({ telemetryData }) => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>RPM:</span>
-                <span className="text-green-400">{telemetryData.rpm || 0}</span>
+                <span className="text-green-400">{telemetryData.RPM || 0}</span>
               </div>
               <div className="flex justify-between">
                 <span>Roll/Pitch/Yaw:</span>
@@ -91,6 +91,10 @@ const LiveData = ({ telemetryData }) => {
                   {telemetryData.pitch || 0}° / 
                   {telemetryData.yaw || 0}°
                 </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Vertical Velocity:</span>
+                <span className="text-green-400">{telemetryData.VerticalVelocity || 0}</span>
               </div>
             </div>
           </div>
